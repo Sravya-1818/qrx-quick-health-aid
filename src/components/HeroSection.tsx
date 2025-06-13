@@ -2,6 +2,7 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Button } from "@/components/ui/button";
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
@@ -29,13 +30,26 @@ const HeroSection = () => {
             elderly, and rural citizens. Essential medical info accessible without any app or login.
           </p>
           
-          <Button 
-            size="lg" 
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-full hover-scale"
-          >
-            Get Your Free QR Badge
-            <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/generate">
+              <Button 
+                size="lg" 
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-full hover-scale"
+              >
+                Get Your Free QR Badge
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+            <Link to="/user/user123">
+              <Button 
+                variant="outline"
+                size="lg" 
+                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg rounded-full hover-scale"
+              >
+                View Demo Profile
+              </Button>
+            </Link>
+          </div>
         </div>
         
         {/* QR Code Visual Element */}
@@ -54,6 +68,7 @@ const HeroSection = () => {
               </div>
             </div>
           </div>
+          <p className="mt-4 text-sm text-gray-600">Scan this code for emergency info</p>
         </div>
       </div>
     </section>
