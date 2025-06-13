@@ -1,33 +1,28 @@
 // src/pages/Landing.tsx
-import { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { auth } from "@/firebase";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const Landing = () => {
   const navigate = useNavigate();
+  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    const user = auth.currentUser;
-    if (user) {
-      navigate("/dashboard");
-    }
-  }, []);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate("/home");
+      } else {
+        navigate("/login");
+      }
+      setChecking(false);
+    });
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen space-y-6 text-center p-6">
-      <h1 className="text-3xl font-bold">Welcome to QRx 🩺</h1>
-      <p className="text-muted-foreground text-lg">Your Quick Health Access Solution</p>
-      <div className="space-x-4">
-        <Link to="/login">
-          <Button>🔐 Login</Button>
-        </Link>
-        <Link to="/signup">
-          <Button variant="outline">📝 Sign Up</Button>
-        </Link>
-      </div>
-    </div>
-  );
+    return () => unsubscribe();
+  }, [navigate]);
+
+  if (checking) return <p className="p-4">Checking login...</p>;
+  return null;
 };
 
 export default Landing;
