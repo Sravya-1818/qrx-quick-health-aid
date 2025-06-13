@@ -28,7 +28,10 @@ export const getUserData = async (userId: string): Promise<UserData | null> => {
   return snap.exists() ? (snap.data() as UserData) : null;
 };
 export const generateQRCodeUrl = (userId: string): string => {
-  const encodedData = encodeURIComponent(`http://localhost:5173/user/${userId}`);
+  const deployedURL = `https://qrx-quick-health-aid.vercel.app/user/${userId}`;
+  const encodedData = encodeURIComponent(deployedURL);
   return `https://api.qrserver.com/v1/create-qr-code/?data=${encodedData}&size=200x200`;
 };
+
+
 

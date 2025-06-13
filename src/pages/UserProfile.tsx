@@ -1,11 +1,10 @@
-// --- src/pages/UserProfile.tsx ---
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { User, Heart, Phone, AlertTriangle, Calendar, Shield } from 'lucide-react';
-import { getUserData, UserData } from '@/services/userData';
+import { getUserData, UserData, generateQRCodeUrl } from '@/services/userData';
 
 const UserProfile = () => {
   const params = useParams();
@@ -81,7 +80,6 @@ const UserProfile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-8">
       <div className="container mx-auto px-6 max-w-2xl">
-        {/* Emergency Alert */}
         <div className="bg-red-100 border-l-4 border-red-500 p-4 mb-6 animate-fade-in">
           <div className="flex items-center">
             <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
@@ -92,7 +90,6 @@ const UserProfile = () => {
           </p>
         </div>
 
-        {/* Personal Information */}
         <Card className="mb-6 hover-scale">
           <CardHeader className="bg-blue-50 rounded-t-lg">
             <CardTitle className="flex items-center text-blue-800">
@@ -119,7 +116,6 @@ const UserProfile = () => {
           </CardContent>
         </Card>
 
-        {/* Medical Info */}
         <Card className="mb-6 hover-scale">
           <CardHeader className="bg-red-50 rounded-t-lg">
             <CardTitle className="flex items-center text-red-800">
@@ -128,7 +124,6 @@ const UserProfile = () => {
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6 space-y-4">
-            {/* Allergies */}
             <div>
               <h4 className="font-semibold text-red-700 mb-2 flex items-center">
                 <AlertTriangle className="h-4 w-4 mr-1" />
@@ -147,7 +142,6 @@ const UserProfile = () => {
               )}
             </div>
 
-            {/* Conditions */}
             <div>
               <h4 className="font-semibold text-orange-700 mb-2">Medical Conditions</h4>
               {userData.medicalConditions.length > 0 ? (
@@ -163,7 +157,6 @@ const UserProfile = () => {
               )}
             </div>
 
-            {/* Medications */}
             <div>
               <h4 className="font-semibold text-blue-700 mb-2">Current Medications</h4>
               {userData.medications.length > 0 ? (
@@ -181,7 +174,6 @@ const UserProfile = () => {
           </CardContent>
         </Card>
 
-        {/* Emergency Contact */}
         <Card className="mb-6 hover-scale">
           <CardHeader className="bg-green-50 rounded-t-lg">
             <CardTitle className="flex items-center text-green-800">
@@ -200,7 +192,21 @@ const UserProfile = () => {
           </CardContent>
         </Card>
 
-        {/* Footer */}
+        <Card className="mb-6 bg-white shadow-sm border-gray-200">
+          <CardHeader className="bg-gray-100 rounded-t-lg">
+            <CardTitle className="text-center text-gray-700 text-base">
+              Scan QR to Access This Profile
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex justify-center p-6">
+            <img
+              src={generateQRCodeUrl(userId)}
+              alt="User QR Code"
+              className="w-40 h-40 rounded-md border"
+            />
+          </CardContent>
+        </Card>
+
         <Card className="bg-gray-50 border-gray-200">
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center mb-2">

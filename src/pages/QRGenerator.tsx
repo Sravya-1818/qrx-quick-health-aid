@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,6 +23,7 @@ const QRGenerator = () => {
       relation: ''
     }
   });
+
   const [generatedUserId, setGeneratedUserId] = useState<string>('');
   const [qrCodeUrl, setQRCodeUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -49,36 +49,30 @@ const QRGenerator = () => {
     setFormData(prev => ({ ...prev, [field]: array }));
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsLoading(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  try {
-    // Generate userId
-    const userId = `${formData.name?.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}`;
+    try {
+      const userId = `${formData.name?.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}`;
+      await saveUserData(userId, formData as UserData);
+      setGeneratedUserId(userId);
+      setQRCodeUrl(generateQRCodeUrl(userId));
 
-    // Save data
-    await saveUserData(userId, formData as UserData);
-
-    // Generate QR code from that ID
-    setGeneratedUserId(userId);
-    setQRCodeUrl(generateQRCodeUrl(userId));
-
-    toast({
-      title: "QR Code Generated Successfully!",
-      description: "Your emergency health profile is ready.",
-    });
-  } catch (error) {
-    toast({
-      title: "Error",
-      description: "Failed to generate QR code. Please try again.",
-      variant: "destructive",
-    });
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+      toast({
+        title: "QR Code Generated Successfully!",
+        description: "Your emergency health profile is ready.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to generate QR code. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const downloadQR = () => {
     const link = document.createElement('a');
@@ -113,7 +107,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <Download className="mr-2 h-4 w-4" />
                   Download QR Code
                 </Button>
-                
+
                 <div className="text-sm text-gray-600">
                   <p>Your profile URL: <Link to={`/user/${generatedUserId}`} className="text-blue-600 hover:underline">
                     /user/{generatedUserId}
