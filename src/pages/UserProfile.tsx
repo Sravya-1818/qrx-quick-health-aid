@@ -3,222 +3,177 @@ import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { User, Heart, Phone, AlertTriangle, Calendar, Shield } from 'lucide-react';
-import { getUserData, UserData, generateQRCodeUrl } from '@/services/userData';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { AlertTriangle, Calendar, Heart, Phone, Shield, User, Pencil } from 'lucide-react';
+import { getUserData, updateUserData, generateQRCodeUrl, UserData } from '@/services/userData';
 
 const UserProfile = () => {
   const params = useParams();
   const userId = params.userId ?? '';
 
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [formData, setFormData] = useState<UserData | null>(null);
+  const [editMode, setEditMode] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (!userId) return;
-
+    const fetchData = async () => {
       setLoading(true);
       try {
         const data = await getUserData(userId);
-        if (data) {
-          setUserData(data);
-        } else {
-          setError(true);
-        }
+        setUserData(data);
+        setFormData(data);
       } catch (err) {
         setError(true);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchUserData();
+    if (userId) fetchData();
   }, [userId]);
 
+  const handleChange = (field: keyof UserData, value: any) => {
+    if (!formData) return;
+    setFormData(prev => ({ ...prev!, [field]: value }));
+  };
+
+  const handleSave = async () => {
+    if (!formData) return;
+    setSaving(true);
+    try {
+      const updated = await updateUserData(userId, formData); // assume this API updates user data
+      setUserData(updated);
+      setEditMode(false);
+    } catch {
+      alert("Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-8">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <div className="bg-red-100 border-l-4 border-red-500 p-4 mb-6">
-            <div className="flex items-center">
-              <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
-              <span className="font-semibold text-red-700">EMERGENCY USE ONLY</span>
-            </div>
-          </div>
-          <Card>
-            <CardHeader>
-              <Skeleton className="h-8 w-48" />
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-              <Skeleton className="h-4 w-1/2" />
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
+    return <Skeleton className="h-40 w-full" />;
   }
 
-  if (error || !userData) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-8">
-        <div className="container mx-auto px-6 max-w-2xl">
-          <Card className="text-center">
-            <CardContent className="py-16">
-              <AlertTriangle className="h-16 w-16 text-red-500 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Profile Not Found</h2>
-              <p className="text-gray-600">The requested health profile could not be found.</p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
+  if (error || !userData || !formData) {
+    return <div>Error loading profile</div>;
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-8">
       <div className="container mx-auto px-6 max-w-2xl">
-        <div className="bg-red-100 border-l-4 border-red-500 p-4 mb-6 animate-fade-in">
-          <div className="flex items-center">
-            <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
-            <span className="font-semibold text-red-700">EMERGENCY USE ONLY</span>
-          </div>
-          <p className="text-red-600 text-sm mt-1">
-            This profile contains critical health information for emergency responders.
-          </p>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-xl font-bold text-gray-800">User Health Profile</h1>
+          <Button variant="outline" onClick={() => setEditMode(!editMode)}>
+            <Pencil className="mr-2 h-4 w-4" />
+            {editMode ? 'Cancel' : 'Edit'}
+          </Button>
         </div>
 
-        <Card className="mb-6 hover-scale">
-          <CardHeader className="bg-blue-50 rounded-t-lg">
+        <Card className="mb-6">
+          <CardHeader>
             <CardTitle className="flex items-center text-blue-800">
               <User className="mr-2 h-5 w-5" />
-              Personal Information
+              Personal Info
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-2xl font-bold text-gray-800">{userData.name}</p>
+          <CardContent>
+            {editMode ? (
+              <>
+                <Input value={formData.name} onChange={e => handleChange("name", e.target.value)} placeholder="Name" className="mb-2" />
+                <Input value={formData.age} onChange={e => handleChange("age", Number(e.target.value))} placeholder="Age" type="number" />
+              </>
+            ) : (
+              <>
+                <p className="text-xl font-semibold">{userData.name}</p>
                 <p className="text-gray-600">Age: {userData.age} years</p>
-              </div>
-              <div className="flex items-center">
-                <div className="w-12 h-12 bg-red-500 text-white rounded-full flex items-center justify-center font-bold text-lg mr-4">
-                  {userData.bloodGroup}
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-800">Blood Group</p>
-                  <p className="text-red-600 font-bold">{userData.bloodGroup}</p>
-                </div>
-              </div>
-            </div>
+              </>
+            )}
           </CardContent>
         </Card>
 
-        <Card className="mb-6 hover-scale">
-          <CardHeader className="bg-red-50 rounded-t-lg">
-            <CardTitle className="flex items-center text-red-800">
-              <Heart className="mr-2 h-5 w-5" />
-              Critical Medical Information
-            </CardTitle>
+        {/* Blood Group */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-red-700">Blood Group</CardTitle>
           </CardHeader>
-          <CardContent className="p-6 space-y-4">
+          <CardContent>
+            {editMode ? (
+              <Input value={formData.bloodGroup} onChange={e => handleChange("bloodGroup", e.target.value)} />
+            ) : (
+              <div className="text-xl font-bold text-red-600">{userData.bloodGroup}</div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Allergies, Medical Conditions */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-red-700">Medical Info</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
             <div>
-              <h4 className="font-semibold text-red-700 mb-2 flex items-center">
-                <AlertTriangle className="h-4 w-4 mr-1" />
-                Allergies
-              </h4>
-              {userData.allergies.length > 0 ? (
+              <p className="font-semibold">Allergies:</p>
+              {editMode ? (
+                <Textarea value={formData.allergies.join(", ")} onChange={e => handleChange("allergies", e.target.value.split(",").map(i => i.trim()))} />
+              ) : (
                 <div className="flex flex-wrap gap-2">
-                  {userData.allergies.map((allergy, index) => (
-                    <Badge key={index} variant="destructive" className="bg-red-100 text-red-800 border-red-300">
-                      ⚠️ {allergy}
-                    </Badge>
+                  {userData.allergies.map((a, i) => (
+                    <Badge key={i} variant="destructive">{a}</Badge>
                   ))}
                 </div>
-              ) : (
-                <p className="text-gray-600 italic">No known allergies</p>
               )}
             </div>
 
             <div>
-              <h4 className="font-semibold text-orange-700 mb-2">Medical Conditions</h4>
-              {userData.medicalConditions.length > 0 ? (
+              <p className="font-semibold">Medical Conditions:</p>
+              {editMode ? (
+                <Textarea value={formData.medicalConditions.join(", ")} onChange={e => handleChange("medicalConditions", e.target.value.split(",").map(i => i.trim()))} />
+              ) : (
                 <div className="flex flex-wrap gap-2">
-                  {userData.medicalConditions.map((condition, index) => (
-                    <Badge key={index} variant="outline" className="bg-orange-50 text-orange-800 border-orange-300">
-                      {condition}
-                    </Badge>
+                  {userData.medicalConditions.map((m, i) => (
+                    <Badge key={i}>{m}</Badge>
                   ))}
                 </div>
-              ) : (
-                <p className="text-gray-600 italic">No known conditions</p>
-              )}
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-blue-700 mb-2">Current Medications</h4>
-              {userData.medications.length > 0 ? (
-                <div className="space-y-1">
-                  {userData.medications.map((medication, index) => (
-                    <p key={index} className="text-gray-700 bg-blue-50 px-3 py-1 rounded">
-                      💊 {medication}
-                    </p>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-gray-600 italic">No current medications</p>
               )}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="mb-6 hover-scale">
-          <CardHeader className="bg-green-50 rounded-t-lg">
-            <CardTitle className="flex items-center text-green-800">
-              <Phone className="mr-2 h-5 w-5" />
-              Emergency Contact
-            </CardTitle>
+        {/* Emergency Contact */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="text-green-700">Emergency Contact</CardTitle>
           </CardHeader>
-          <CardContent className="p-6">
-            <div className="bg-green-100 p-4 rounded-lg">
-              <p className="text-lg font-semibold text-green-800">{userData.emergencyContact.name}</p>
-              <p className="text-green-700">({userData.emergencyContact.relation})</p>
-              <a href={`tel:${userData.emergencyContact.phone}`} className="text-2xl font-bold text-green-600 hover:text-green-800">
-                📞 {userData.emergencyContact.phone}
-              </a>
-            </div>
+          <CardContent>
+            {editMode ? (
+              <>
+                <Input value={formData.emergencyContact.name} onChange={e => handleChange("emergencyContact", { ...formData.emergencyContact, name: e.target.value })} className="mb-2" />
+                <Input value={formData.emergencyContact.phone} onChange={e => handleChange("emergencyContact", { ...formData.emergencyContact, phone: e.target.value })} className="mb-2" />
+                <Input value={formData.emergencyContact.relation} onChange={e => handleChange("emergencyContact", { ...formData.emergencyContact, relation: e.target.value })} />
+              </>
+            ) : (
+              <div>
+                <p className="font-semibold text-lg">{userData.emergencyContact.name}</p>
+                <p>{userData.emergencyContact.relation}</p>
+                <p className="text-green-600">{userData.emergencyContact.phone}</p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        <Card className="mb-6 bg-white shadow-sm border-gray-200">
-          <CardHeader className="bg-gray-100 rounded-t-lg">
-            <CardTitle className="text-center text-gray-700 text-base">
-              Scan QR to Access This Profile
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex justify-center p-6">
-            <img
-              src={generateQRCodeUrl(userId)}
-              alt="User QR Code"
-              className="w-40 h-40 rounded-md border"
-            />
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gray-50 border-gray-200">
-          <CardContent className="p-4 text-center">
-            <div className="flex items-center justify-center mb-2">
-              <Shield className="h-4 w-4 text-gray-600 mr-2" />
-              <span className="text-sm text-gray-600">Powered by QRx – For Life's Emergencies</span>
-            </div>
-            <div className="flex items-center justify-center text-xs text-gray-500">
-              <Calendar className="h-3 w-3 mr-1" />
-              Last Updated: {userData.lastUpdated}
-            </div>
-          </CardContent>
-        </Card>
+        {/* Save Button */}
+        {editMode && (
+          <div className="text-right">
+            <Button onClick={handleSave} disabled={saving}>
+              {saving ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );

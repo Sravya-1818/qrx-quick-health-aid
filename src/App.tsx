@@ -1,32 +1,79 @@
-
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// QR Generator pages
 import Index from "./pages/Index";
 import QRGenerator from "./pages/QRGenerator";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
+import DemoProfile from "./pages/DemoProfile"; // ✅ NEW
+
+// Auth + Dashboard pages
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import EditProfile from "./pages/EditProfile";
+
+// Protected route wrapper
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/generate" element={<QRGenerator />} />
-          <Route path="/user/:userId" element={<UserProfile />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <Router>
+          <Routes>
+            {/* Public Auth Routes */}
+            <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/demo" element={<DemoProfile />} /> {/* ✅ DEMO PAGE */}
+
+            {/* Protected Dashboard/Profile */}
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/edit-profile"
+              element={
+                <ProtectedRoute>
+                  <EditProfile />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* QR Generator Routes */}
+            <Route path="/home" element={<Index />} />
+            <Route path="/generate" element={<QRGenerator />} />
+            <Route path="/user/:userId" element={<UserProfile />} />
+
+            {/* Catch-all */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
