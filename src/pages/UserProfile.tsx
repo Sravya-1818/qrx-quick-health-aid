@@ -1,14 +1,16 @@
-
-import React, { useState, useEffect } from 'react';
+// --- src/pages/UserProfile.tsx ---
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { User, Heart, Phone, AlertTriangle, Calendar, Shield } from 'lucide-react';
-import { UserData, getUserData } from '@/services/userData';
+import { getUserData, UserData } from '@/services/userData';
 
 const UserProfile = () => {
-  const { userId } = useParams<{ userId: string }>();
+  const params = useParams();
+  const userId = params.userId ?? '';
+
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -16,7 +18,7 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (!userId) return;
-      
+
       setLoading(true);
       try {
         const data = await getUserData(userId);
@@ -45,7 +47,6 @@ const UserProfile = () => {
               <span className="font-semibold text-red-700">EMERGENCY USE ONLY</span>
             </div>
           </div>
-          
           <Card>
             <CardHeader>
               <Skeleton className="h-8 w-48" />
@@ -80,7 +81,7 @@ const UserProfile = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-8">
       <div className="container mx-auto px-6 max-w-2xl">
-        {/* Emergency Alert Banner */}
+        {/* Emergency Alert */}
         <div className="bg-red-100 border-l-4 border-red-500 p-4 mb-6 animate-fade-in">
           <div className="flex items-center">
             <AlertTriangle className="h-5 w-5 text-red-500 mr-2" />
@@ -118,7 +119,7 @@ const UserProfile = () => {
           </CardContent>
         </Card>
 
-        {/* Medical Information */}
+        {/* Medical Info */}
         <Card className="mb-6 hover-scale">
           <CardHeader className="bg-red-50 rounded-t-lg">
             <CardTitle className="flex items-center text-red-800">
@@ -146,7 +147,7 @@ const UserProfile = () => {
               )}
             </div>
 
-            {/* Medical Conditions */}
+            {/* Conditions */}
             <div>
               <h4 className="font-semibold text-orange-700 mb-2">Medical Conditions</h4>
               {userData.medicalConditions.length > 0 ? (
@@ -162,7 +163,7 @@ const UserProfile = () => {
               )}
             </div>
 
-            {/* Current Medications */}
+            {/* Medications */}
             <div>
               <h4 className="font-semibold text-blue-700 mb-2">Current Medications</h4>
               {userData.medications.length > 0 ? (
@@ -192,17 +193,14 @@ const UserProfile = () => {
             <div className="bg-green-100 p-4 rounded-lg">
               <p className="text-lg font-semibold text-green-800">{userData.emergencyContact.name}</p>
               <p className="text-green-700">({userData.emergencyContact.relation})</p>
-              <a 
-                href={`tel:${userData.emergencyContact.phone}`} 
-                className="text-2xl font-bold text-green-600 hover:text-green-800 transition-colors"
-              >
+              <a href={`tel:${userData.emergencyContact.phone}`} className="text-2xl font-bold text-green-600 hover:text-green-800">
                 📞 {userData.emergencyContact.phone}
               </a>
             </div>
           </CardContent>
         </Card>
 
-        {/* Trust Footer */}
+        {/* Footer */}
         <Card className="bg-gray-50 border-gray-200">
           <CardContent className="p-4 text-center">
             <div className="flex items-center justify-center mb-2">

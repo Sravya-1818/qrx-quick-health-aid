@@ -49,29 +49,36 @@ const QRGenerator = () => {
     setFormData(prev => ({ ...prev, [field]: array }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsLoading(true);
 
-    try {
-      const userId = await saveUserData(formData as UserData);
-      setGeneratedUserId(userId);
-      setQRCodeUrl(generateQRCodeUrl(userId));
-      
-      toast({
-        title: "QR Code Generated Successfully!",
-        description: "Your emergency health profile is ready.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to generate QR code. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  try {
+    // Generate userId
+    const userId = `${formData.name?.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}`;
+
+    // Save data
+    await saveUserData(userId, formData as UserData);
+
+    // Generate QR code from that ID
+    setGeneratedUserId(userId);
+    setQRCodeUrl(generateQRCodeUrl(userId));
+
+    toast({
+      title: "QR Code Generated Successfully!",
+      description: "Your emergency health profile is ready.",
+    });
+  } catch (error) {
+    toast({
+      title: "Error",
+      description: "Failed to generate QR code. Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   const downloadQR = () => {
     const link = document.createElement('a');
