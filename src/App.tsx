@@ -9,7 +9,11 @@ import Index from "./pages/Index";
 import QRGenerator from "./pages/QRGenerator";
 import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/NotFound";
+
 import DemoProfile from "./pages/DemoProfile"; // ✅ NEW
+
+import DemoProfile from "./pages/DemoProfile"; //✅ Demo Page
+
 
 // Auth + Dashboard pages
 import Login from "./pages/Login";
@@ -31,12 +35,21 @@ const App = () => {
         <Sonner />
         <Router>
           <Routes>
+
             {/* Public Auth Routes */}
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/demo" element={<DemoProfile />} /> {/* ✅ DEMO PAGE */}
 
             {/* Protected Dashboard/Profile */}
+
+            {/* Public Routes */}
+            <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/demo" element={<DemoProfile />} />
+
+            {/* Protected Routes */}
+
             <Route
               path="/dashboard"
               element={
@@ -67,7 +80,8 @@ const App = () => {
             <Route path="/generate" element={<QRGenerator />} />
             <Route path="/user/:userId" element={<UserProfile />} />
 
-            {/* Catch-all */}
+
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Router>
