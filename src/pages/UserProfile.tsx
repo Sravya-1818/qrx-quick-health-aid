@@ -6,8 +6,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { AlertTriangle, Calendar, Heart, Phone, Shield, User, Pencil } from 'lucide-react';
-import { getUserData, updateUserData, generateQRCodeUrl, UserData } from '@/services/userData';
+import { User, Pencil } from 'lucide-react';
+import { getUserData, updateUserData, UserData } from '@/services/userData';
 
 const UserProfile = () => {
   const params = useParams();
@@ -45,7 +45,7 @@ const UserProfile = () => {
     if (!formData) return;
     setSaving(true);
     try {
-      const updated = await updateUserData(userId, formData); // assume this API updates user data
+      const updated = await updateUserData(userId, formData);
       setUserData(updated);
       setEditMode(false);
     } catch {
@@ -96,7 +96,6 @@ const UserProfile = () => {
           </CardContent>
         </Card>
 
-        {/* Blood Group */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-red-700">Blood Group</CardTitle>
@@ -110,7 +109,6 @@ const UserProfile = () => {
           </CardContent>
         </Card>
 
-        {/* Allergies, Medical Conditions */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-red-700">Medical Info</CardTitle>
@@ -144,7 +142,6 @@ const UserProfile = () => {
           </CardContent>
         </Card>
 
-        {/* Emergency Contact */}
         <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-green-700">Emergency Contact</CardTitle>
@@ -166,7 +163,6 @@ const UserProfile = () => {
           </CardContent>
         </Card>
 
-        {/* Save Button */}
         {editMode && (
           <div className="text-right">
             <Button onClick={handleSave} disabled={saving}>

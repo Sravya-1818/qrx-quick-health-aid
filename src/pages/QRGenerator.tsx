@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Download, User, Heart, Phone, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { UserData, saveUserData, generateQRCodeUrl } from '@/services/userData';
+import { UserData, updateUserData, generateQRCodeUrl } from '@/services/userData';
 import { useToast } from "@/hooks/use-toast";
 
 const QRGenerator = () => {

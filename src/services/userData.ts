@@ -1,7 +1,7 @@
 import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
-// Updated user data interface with optional fields for flexibility
+// Updated user data interface
 export interface UserData {
   name: string;
   age: number;
@@ -15,14 +15,17 @@ export interface UserData {
     relation: string;
   };
   lastUpdated: string;
-  profilePhotoUrl?: string; // Optional profile photo
-  email?: string;           // Useful if you want to link Firebase Auth data
+  profilePhotoUrl?: string;
+  email?: string;
 }
 
-// Save user profile to Firestore
-export const saveUserData = async (userId: string, data: UserData): Promise<string> => {
-  await setDoc(doc(db, "profiles", userId), data);
-  return userId;
+// Update user profile to Firestore
+export const updateUserData = async (userId: string, data: UserData): Promise<UserData> => {
+  await setDoc(doc(db, "profiles", userId), {
+    ...data,
+    lastUpdated: new Date().toISOString(),
+  });
+  return data;
 };
 
 // Get user profile from Firestore
@@ -32,7 +35,7 @@ export const getUserData = async (userId: string): Promise<UserData | null> => {
   return snap.exists() ? (snap.data() as UserData) : null;
 };
 
-// Generate a public QR code for the profile
+// Generate a public QR code URL
 export const generateQRCodeUrl = (userId: string): string => {
   const deployedURL = `https://qrx-quick-health-aid.vercel.app/user/${userId}`;
   const encodedData = encodeURIComponent(deployedURL);

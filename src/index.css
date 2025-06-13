@@ -2,9 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 🧱 Define reusable custom classes in components BEFORE using them */
+@layer components {
+  .border-border {
+    @apply border border-gray-300;
+  }
+}
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
-
+/* 🌐 Base styles and design tokens */
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -50,23 +55,32 @@
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
+
     --card: 222.2 84% 4.9%;
     --card-foreground: 210 40% 98%;
+
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
+
     --primary: 210 40% 98%;
     --primary-foreground: 222.2 47.4% 11.2%;
+
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
+
     --muted: 217.2 32.6% 17.5%;
     --muted-foreground: 215 20.2% 65.1%;
+
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
+
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -76,9 +90,7 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
@@ -92,19 +104,20 @@
   }
 }
 
+/* ✨ Custom utilities and animations */
 @layer utilities {
   .animate-fade-in {
     animation: fade-in 0.8s ease-out;
   }
-  
+
   .animate-scale-in {
     animation: scale-in 0.6s ease-out 0.2s both;
   }
-  
+
   .hover-scale {
     transition: transform 0.2s ease-in-out;
   }
-  
+
   .hover-scale:hover {
     transform: scale(1.05);
   }
@@ -119,7 +132,7 @@
       transform: translateY(0);
     }
   }
-  
+
   @keyframes scale-in {
     from {
       opacity: 0;

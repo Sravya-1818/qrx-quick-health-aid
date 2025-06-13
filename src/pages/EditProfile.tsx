@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/firebase";
-import { getUserData, saveUserData, UserData } from "@/services/userData";
+import { getUserData, updateUserData, UserData } from "@/services/userData";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -67,7 +67,7 @@ const EditProfile = () => {
       lastUpdated: new Date().toLocaleDateString(),
       email: user?.email || "",
     };
-    await saveUserData(userId, updatedData);
+    await updateUserData(userId, updatedData); // ✅ fixed
     navigate("/profile");
   };
 
@@ -82,11 +82,9 @@ const EditProfile = () => {
       <Textarea name="allergies" value={formData.allergies.join(", ")} onChange={handleChange} placeholder="Allergies (comma-separated)" />
       <Textarea name="medications" value={formData.medications.join(", ")} onChange={handleChange} placeholder="Medications (comma-separated)" />
       <Textarea name="medicalConditions" value={formData.medicalConditions.join(", ")} onChange={handleChange} placeholder="Medical Conditions (comma-separated)" />
-
       <Input name="emergencyContact.name" value={formData.emergencyContact.name} onChange={handleChange} placeholder="Emergency Contact Name" />
       <Input name="emergencyContact.relation" value={formData.emergencyContact.relation} onChange={handleChange} placeholder="Relation" />
       <Input name="emergencyContact.phone" value={formData.emergencyContact.phone} onChange={handleChange} placeholder="Phone Number" />
-
       <Button onClick={handleSubmit}>💾 Save Profile</Button>
     </div>
   );
