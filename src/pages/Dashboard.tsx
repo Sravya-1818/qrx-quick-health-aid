@@ -1,13 +1,15 @@
-// inside any component (e.g. Navbar.tsx)
+// Dashboard.tsx
 import { signOut } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { auth } from "@/firebase";  // ✅ Correct
 import { useNavigate } from "react-router-dom";
 
-const handleLogout = async () => {
-  await signOut(auth);
-  navigate("/"); // goes back to Landing
-};
+const Dashboard = () => {
+  const navigate = useNavigate();
 
+  const handleLogout = async () => {
+    await signOut(auth);
+    navigate("/"); // 👈 Will redirect to landing, which checks auth
+  };
 
   return (
     <div>

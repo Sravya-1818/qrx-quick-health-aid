@@ -1,7 +1,9 @@
 // src/firebase.ts
+
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBD4_ylSmK8jwlUuCr1eAI8Jf3-mrS5g_c",
@@ -13,9 +15,14 @@ const firebaseConfig = {
   measurementId: "G-C4X0D3TX7H"
 };
 
+// ✅ Initialize Firebase
 const app = initializeApp(firebaseConfig);
+
+// ✅ Firebase Services
 const db = getFirestore(app);
 const auth = getAuth(app);
+const storage = getStorage(app);
+const googleProvider = new GoogleAuthProvider();
 
-// ✅ Correct export — only once, after defining
-export { db, auth };
+// ✅ Export all services from one place
+export { db, auth, storage, googleProvider };
