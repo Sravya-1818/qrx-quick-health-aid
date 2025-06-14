@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
+import { auth } from "@/firebase";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const Signup = () => {
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       alert("Signup successful!");
-      navigate("/dashboard");
+      navigate("/home"); // ✅ Redirect to homepage after signup
     } catch (err) {
       console.error("Signup failed", err);
       alert("Signup failed");
