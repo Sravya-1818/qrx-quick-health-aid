@@ -1,26 +1,15 @@
 // src/pages/Index.tsx
-import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "@/firebase";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
+  const { user, loading, logout } = useAuth(); // ✅ Use context instead of duplicating
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await logout();
       navigate("/login");
     } catch (err) {
       console.error("Logout failed:", err);
