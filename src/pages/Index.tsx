@@ -1,35 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import { LogOut, UserCircle } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { signOut, onAuthStateChanged } from 'firebase/auth';
-import { auth } from '@/firebase';
-
+import React from "react";
+import { LogOut, UserCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import HeroSection from '@/components/HeroSection';
-import HowItWorks from '@/components/HowItWorks';
-import BenefitsSection from '@/components/BenefitsSection';
-import TestimonialsSection from '@/components/TestimonialsSection';
-import Footer from '@/components/Footer';
+import { useAuth } from "@/context/AuthContext";
+
+import HeroSection from "@/components/HeroSection";
+import HowItWorks from "@/components/HowItWorks";
+import BenefitsSection from "@/components/BenefitsSection";
+import TestimonialsSection from "@/components/TestimonialsSection";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      console.log("👤 Auth State Changed:", currentUser);
-      setUser(currentUser);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
+  const { user, loading, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
-      navigate('/');
+      await logout();
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -44,8 +32,7 @@ const Index = () => {
   }
 
   if (!user) {
-    console.warn("⚠️ No user, redirecting to login...");
-    navigate('/');
+    navigate("/");
     return null;
   }
 

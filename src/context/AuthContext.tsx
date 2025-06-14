@@ -1,26 +1,37 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { User, onAuthStateChanged, signOut } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "@/firebase";
+import {
+  onAuthStateChanged,
+  signOut,
+  User,
+} from "firebase/auth";
 
 interface AuthContextType {
-  currentUser: User | null;
+  user: User | null;
+  loading: boolean;
   logout: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, setCurrentUser);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
     return () => unsubscribe();
   }, []);
 
-  const logout = () => signOut(auth);
+  const logout = async () => {
+    await signOut(auth);
+  };
 
   return (
-    <AuthContext.Provider value={{ currentUser, logout }}>
+    <AuthContext.Provider value={{ user, loading, logout }}>
       {children}
     </AuthContext.Provider>
   );

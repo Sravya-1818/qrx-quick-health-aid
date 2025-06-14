@@ -4,29 +4,45 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "@/firebase";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
-import { Button } from "@/components/ui/button"; // optional if you're using shadcn
-import { FcGoogle } from "react-icons/fc"; // optional icon
+import { Button } from "@/components/ui/button";
+import { FcGoogle } from "react-icons/fc";
 
 const Landing = () => {
   const navigate = useNavigate();
   const [isLoginMode, setIsLoginMode] = useState(true);
+  const [loading, setLoading] = useState(true); // 🔹 loading state
+  const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) navigate("/home");
+      setLoading(false);
+      setAuthChecked(true);
+      if (user) {
+        navigate("/home");
+      }
     });
     return () => unsubscribe();
   }, [navigate]);
 
   const handleGoogleLogin = async () => {
     try {
+      setLoading(true);
       await signInWithPopup(auth, googleProvider);
-      navigate("/home");
+      // No need to call navigate here — onAuthStateChanged handles it
     } catch (error) {
       console.error("Google login failed:", error);
-      alert("Google sign-in failed. Try again.");
+      alert("Google sign-in failed. Please try again.");
+      setLoading(false);
     }
   };
+
+  if (!authChecked || loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-gray-600 text-lg">Checking authentication...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-green-50 p-6">
