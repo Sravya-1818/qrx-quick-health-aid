@@ -9,7 +9,6 @@ import {
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
-// ✅ Your Firebase Project Config
 const firebaseConfig = {
   apiKey: "AIzaSyBD4_ylSmK8jwlUuCr1eAI8Jf3-mrS5g_c",
   authDomain: "qrx-health.firebaseapp.com",
@@ -20,16 +19,12 @@ const firebaseConfig = {
   measurementId: "G-C4X0D3TX7H",
 };
 
-// ✅ Initialize Firebase App
 const app = initializeApp(firebaseConfig);
-
-// ✅ Initialize Services
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 const googleProvider = new GoogleAuthProvider();
 
-// ✅ Keep users signed in on refresh
 setPersistence(auth, browserLocalPersistence).catch((err) => {
   console.error("Error setting auth persistence:", err);
 });

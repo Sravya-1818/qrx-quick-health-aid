@@ -1,5 +1,5 @@
-
 import React from 'react';
+import { ArrowRight as LucideArrowRight } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 
 const HowItWorks = () => {
@@ -11,14 +11,14 @@ const HowItWorks = () => {
       icon: "📝"
     },
     {
-      number: "2", 
+      number: "2",
       title: "Receive QR Badge",
       description: "Get your personalized QR code badge to wear or carry with you",
       icon: "🏷️"
     },
     {
       number: "3",
-      title: "Scan in Emergency", 
+      title: "Scan in Emergency",
       description: "Anyone can scan your QR code with any smartphone to access your info",
       icon: "📱"
     },
@@ -41,7 +41,7 @@ const HowItWorks = () => {
             Simple steps to protect yourself and your loved ones
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {steps.map((step, index) => (
             <Card key={index} className="relative hover-scale bg-card border-border">
@@ -60,12 +60,12 @@ const HowItWorks = () => {
             </Card>
           ))}
         </div>
-        
+
         {/* Arrow connections for desktop */}
         <div className="hidden lg:block relative -mt-32 mb-16">
           <div className="flex justify-between items-center max-w-6xl mx-auto px-20">
             {[1, 2, 3].map((i) => (
-              <ArrowRight key={i} className="text-blue-300 h-8 w-8" />
+              <ArrowConnector key={i} className="text-blue-300 h-8 w-8" />
             ))}
           </div>
         </div>
@@ -74,7 +74,8 @@ const HowItWorks = () => {
   );
 };
 
-const ArrowRight = ({ className }: { className: string }) => (
+// ✅ Renamed to avoid conflict with lucide-react's ArrowRight
+const ArrowConnector = ({ className }: { className: string }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
   </svg>

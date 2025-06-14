@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -12,7 +11,7 @@ const BenefitsSection = () => {
     },
     {
       title: "Works Offline",
-      description: "No internet required - works on any smartphone camera",
+      description: "No internet required – works on any smartphone camera",
       icon: "📶",
       color: "from-green-500 to-green-600"
     },
@@ -24,7 +23,7 @@ const BenefitsSection = () => {
     },
     {
       title: "No App Needed",
-      description: "Anyone can scan - no special apps or downloads required",
+      description: "Anyone can scan – no special apps or downloads required",
       icon: "📲",
       color: "from-purple-500 to-purple-600"
     },
@@ -53,12 +52,18 @@ const BenefitsSection = () => {
             Designed for everyone, especially those who need it most
           </p>
         </div>
-        
+
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {benefits.map((benefit, index) => (
-            <Card key={index} className="hover-scale bg-card/80 backdrop-blur border-border">
+            <Card
+              key={index}
+              className="hover:scale-[1.02] transition-transform duration-300 bg-card/80 backdrop-blur-md border border-border shadow-lg"
+            >
               <CardContent className="p-8 text-center">
-                <div className={`w-16 h-16 mx-auto mb-6 bg-gradient-to-r ${benefit.color} rounded-full flex items-center justify-center text-2xl`}>
+                <div
+                  className={`w-16 h-16 mx-auto mb-6 bg-gradient-to-r ${benefit.color} rounded-full flex items-center justify-center text-3xl`}
+                  aria-hidden="true"
+                >
                   {benefit.icon}
                 </div>
                 <h3 className="text-xl font-semibold text-foreground mb-3">
