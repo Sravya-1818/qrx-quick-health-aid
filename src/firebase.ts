@@ -1,4 +1,4 @@
-// src/firebase.ts
+// firebase.ts
 import { initializeApp } from "firebase/app";
 import {
   getAuth,
@@ -24,6 +24,8 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 const googleProvider = new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({ prompt: "select_account" });
 
 setPersistence(auth, browserLocalPersistence).catch((err) => {
   console.error("Error setting auth persistence:", err);
