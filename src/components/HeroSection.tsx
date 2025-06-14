@@ -1,74 +1,71 @@
 
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, QrCode, Heart, Shield } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 overflow-hidden">
-      {/* Background Animation Elements */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-blue-400 rounded-full animate-pulse"></div>
-        <div className="absolute top-60 right-32 w-24 h-24 bg-green-400 rounded-full animate-pulse delay-1000"></div>
-        <div className="absolute bottom-40 left-1/3 w-20 h-20 bg-blue-300 rounded-full animate-pulse delay-2000"></div>
+    <section className="relative bg-gradient-to-br from-blue-50 via-white to-green-50 py-20">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="grid grid-cols-12 gap-4 h-full">
+          {Array.from({ length: 48 }).map((_, i) => (
+            <div key={i} className="bg-blue-200 rounded-full w-2 h-2 animate-pulse" 
+                 style={{ animationDelay: `${i * 0.1}s` }} />
+          ))}
+        </div>
       </div>
-      
-      <div className="container mx-auto px-6 text-center z-10">
-        <div className="max-w-4xl mx-auto animate-fade-in">
-          <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 leading-tight">
-            Emergency Health Info
-            <span className="block text-blue-600">at a Scan</span>
+
+      <div className="container mx-auto px-6 text-center relative z-10">
+        <div className="max-w-4xl mx-auto">
+          {/* Main Headline */}
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            Emergency Health Info 
+            <span className="block text-blue-600 animate-fade-in-up">at a Scan</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          {/* Subheadline */}
+          <p className="text-xl md:text-2xl text-gray-700 mb-8 animate-fade-in-up animation-delay-200">
             A QR code that speaks when you can't
           </p>
           
-          <p className="text-lg text-muted-foreground mb-12 max-w-3xl mx-auto">
-            QRx provides simple QR code-based health IDs for vulnerable people like daily wage workers, 
-            elderly, and rural citizens. Essential medical info accessible without any app or login.
+          <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto animate-fade-in-up animation-delay-400">
+            Simple QR code-based health IDs for vulnerable people. Essential medical info like blood group, 
+            allergies, and emergency contacts—accessible without any app or login.
           </p>
-          
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+
+          {/* CTA Button */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-up animation-delay-600">
             <Link to="/generate">
-              <Button 
-                size="lg" 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg rounded-full hover-scale"
-              >
+              <Button size="lg" className="text-lg px-8 py-6 bg-blue-600 hover:bg-blue-700 transform hover:scale-105 transition-all duration-200">
+                <QrCode className="mr-2 h-5 w-5" />
                 Get Your Free QR Badge
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link to="/user/user123">
-              <Button 
-                variant="outline"
-                size="lg" 
-                className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 text-lg rounded-full hover-scale"
-              >
-                View Demo Profile
-              </Button>
-            </Link>
+            
+            <Button variant="outline" size="lg" className="text-lg px-8 py-6 border-2 hover:bg-gray-50 transform hover:scale-105 transition-all duration-200">
+              <Heart className="mr-2 h-5 w-5 text-red-500" />
+              See How It Saves Lives
+            </Button>
           </div>
-        </div>
-        
-        {/* QR Code Visual Element */}
-        <div className="mt-16 animate-scale-in">
-          <div className="inline-block p-4 bg-white rounded-2xl shadow-2xl">
-            <div className="w-40 h-40 bg-gradient-to-br from-gray-800 to-gray-600 rounded-lg flex items-center justify-center">
-              <div className="grid grid-cols-8 gap-1 p-4">
-                {Array.from({ length: 64 }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`w-2 h-2 ${
-                      Math.random() > 0.5 ? 'bg-white' : 'bg-gray-800'
-                    }`}
-                  />
-                ))}
-              </div>
+
+          {/* Trust Indicators */}
+          <div className="mt-16 flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600 animate-fade-in-up animation-delay-800">
+            <div className="flex items-center">
+              <Shield className="h-4 w-4 text-green-500 mr-2" />
+              <span>100% Secure & Private</span>
+            </div>
+            <div className="flex items-center">
+              <QrCode className="h-4 w-4 text-blue-500 mr-2" />
+              <span>Works Offline</span>
+            </div>
+            <div className="flex items-center">
+              <Heart className="h-4 w-4 text-red-500 mr-2" />
+              <span>Saves Lives</span>
             </div>
           </div>
-          <p className="mt-4 text-sm text-gray-600">Scan this code for emergency info</p>
         </div>
       </div>
     </section>
