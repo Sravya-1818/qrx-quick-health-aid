@@ -1,49 +1,60 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
 import { auth } from "@/firebase";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSignup = async () => {
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-      alert("Signup successful!");
-      navigate("/home"); // ✅ Redirect to homepage after signup
-    } catch (err) {
-      console.error("Signup failed", err);
-      alert("Signup failed");
+      navigate("/home");
+    } catch (err: any) {
+      if (err.code === "auth/email-already-in-use") {
+        setError("Email is already in use.");
+      } else if (err.code === "auth/weak-password") {
+        setError("Password should be at least 6 characters.");
+      } else {
+        setError("Signup failed: " + err.message);
+      }
     }
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-xl font-bold mb-4">Create Account</h2>
+    <div className="flex flex-col items-center justify-center h-screen">
+      <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
+      <form onSubmit={handleSignup} className="flex flex-col gap-4 w-80">
         <input
           type="email"
           placeholder="Email"
-          className="w-full mb-2 p-2 border rounded"
           value={email}
+          required
           onChange={(e) => setEmail(e.target.value)}
+          className="border p-2 rounded"
         />
         <input
           type="password"
           placeholder="Password"
-          className="w-full mb-4 p-2 border rounded"
           value={password}
+          required
           onChange={(e) => setPassword(e.target.value)}
+          className="border p-2 rounded"
         />
+        {error && <p className="text-red-500 text-sm">{error}</p>}
         <button
-          onClick={handleSignup}
-          className="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700"
+          type="submit"
+          className="bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
         >
           Sign Up
         </button>
-      </div>
+      </form>
     </div>
   );
 };
