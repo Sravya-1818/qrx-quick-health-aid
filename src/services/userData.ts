@@ -1,6 +1,6 @@
 // src/services/userData.ts
 import { doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "@/lib/firebase";
 
 // Define your user profile structure
 export interface UserData {

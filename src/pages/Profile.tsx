@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 
 const Profile = () => {

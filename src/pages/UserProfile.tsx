@@ -9,8 +9,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { User, Pencil } from 'lucide-react';
 import { getUserData, updateUserData, UserData } from '@/services/userData';
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/firebase";
-import { QRCode } from "qrcode.react";
+import { auth } from "@/lib/firebase";
+import { QRCodeCanvas } from "qrcode.react"; // ✅ Correct import for v3+
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 

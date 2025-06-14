@@ -1,7 +1,7 @@
 // src/pages/Landing.tsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth, googleProvider } from "@/firebase";
+import { auth, googleProvider } from "@/lib/firebase";
 import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
