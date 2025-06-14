@@ -1,5 +1,3 @@
-// src/pages/Index.tsx
-
 import React, { useEffect, useState } from 'react';
 import { ArrowRight, LogOut, UserCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -59,6 +57,14 @@ const Index = () => {
       <HowItWorks />
       <BenefitsSection />
       <TestimonialsSection />
+
+      {/* 📝 Feedback Button */}
+      <div className="flex justify-center my-10">
+        <Button onClick={() => navigate('/feedback')} className="bg-indigo-600 text-white hover:bg-indigo-700">
+          Give Feedback
+        </Button>
+      </div>
+
       <Footer />
     </div>
   );

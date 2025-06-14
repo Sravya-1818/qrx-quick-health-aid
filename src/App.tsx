@@ -17,7 +17,6 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import Feedback from "@/pages/Feedback";
 
-
 // Shared Layout and Auth
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
@@ -37,8 +36,9 @@ const App = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/demo" element={<DemoProfile />} />
+            <Route path="/feedback" element={<Feedback />} />
 
-            {/* ✅ Protected Layout Pages with Navbar */}
+            {/* 🔐 Protected Routes under Layout with Navbar */}
             <Route
               element={
                 <ProtectedRoute>
@@ -53,15 +53,8 @@ const App = () => {
               <Route path="/user/:userId" element={<UserProfile />} />
             </Route>
 
-            {/* ❌ 404 Fallback */}
+            {/* ❌ Fallback */}
             <Route path="*" element={<NotFound />} />
-<<<<<<< HEAD
-
-// inside <Routes>
-<Route path="/feedback" element={<Feedback />} />
-
-=======
->>>>>>> 8528bf5 (✨ Added Navbar with Logout/Profile, fixed DemoProfile page)
           </Routes>
         </Router>
       </TooltipProvider>
