@@ -6,15 +6,17 @@ const DemoProfile = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-green-100 to-purple-100 p-6">
+    <div className="min-h-screen bg-gradient-to-r from-blue-100 via-green-100 to-purple-100 py-10 px-4">
       <div className="max-w-3xl mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">How to Fill Your Medical Profile</CardTitle>
+            <CardTitle className="text-2xl text-center">How to Fill Your Medical Profile</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6 text-gray-700">
             <div>
-              <h3 className="font-semibold">👤 Basic Information</h3>
+              <h3 className="font-semibold">
+                <span role="img" aria-label="profile">👤</span> Basic Information
+              </h3>
               <ul className="list-disc ml-6">
                 <li><strong>Name:</strong> Your full legal name.</li>
                 <li><strong>Age:</strong> Your current age in years.</li>
@@ -23,7 +25,9 @@ const DemoProfile = () => {
             </div>
 
             <div>
-              <h3 className="font-semibold">🌿 Medical Details</h3>
+              <h3 className="font-semibold">
+                <span role="img" aria-label="leaf">🌿</span> Medical Details
+              </h3>
               <ul className="list-disc ml-6">
                 <li><strong>Allergies:</strong> Example: "Peanuts, Penicillin".</li>
                 <li><strong>Medical Conditions:</strong> Example: "Diabetes, Asthma".</li>
@@ -32,7 +36,9 @@ const DemoProfile = () => {
             </div>
 
             <div>
-              <h3 className="font-semibold">📞 Emergency Contact</h3>
+              <h3 className="font-semibold">
+                <span role="img" aria-label="phone">📞</span> Emergency Contact
+              </h3>
               <ul className="list-disc ml-6">
                 <li><strong>Name:</strong> Someone to contact in case of emergency.</li>
                 <li><strong>Phone:</strong> Their phone number.</li>
@@ -41,8 +47,8 @@ const DemoProfile = () => {
             </div>
 
             <div className="text-center">
-              <Button onClick={() => navigate("/edit-profile")}>
-                Fill My Profile Now
+              <Button className="w-full sm:w-auto" onClick={() => navigate("/edit-profile")}>
+                🚀 Fill My Profile Now
               </Button>
             </div>
           </CardContent>

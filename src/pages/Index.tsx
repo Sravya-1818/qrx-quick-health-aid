@@ -2,10 +2,12 @@
 import { useAuth } from "@/context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { User, QrCode, Eye, LogOut } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { user, loading, logout } = useAuth(); // ✅ Use context instead of duplicating
+  const { user, loading, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -25,39 +27,69 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-100 to-green-100 px-6 py-10">
-      <h1 className="text-3xl font-bold text-blue-800 mb-6 text-center">
-        Welcome to QRx, {user?.displayName || user?.email}!
-      </h1>
+    <div className="min-h-screen px-6 py-10 bg-gradient-to-br from-blue-50 to-green-100">
+      <div className="max-w-3xl mx-auto text-center mb-10">
+        <h1 className="text-4xl font-bold text-blue-900">Welcome to QRx 👋</h1>
+        <p className="text-lg text-gray-700 mt-2">
+          Your personal emergency health ID in a QR code.
+        </p>
+        <p className="text-md text-gray-600 mt-1">
+          Logged in as <span className="font-medium text-black">{user?.email}</span>
+        </p>
+      </div>
 
-      <div className="flex flex-col gap-4 w-full max-w-xs">
-        <Button onClick={() => navigate("/generate")} className="w-full">
-          📌 Create QR Code
-        </Button>
+      <div className="grid gap-6 sm:grid-cols-2 max-w-2xl mx-auto">
+        <Card
+          onClick={() => navigate("/generate")}
+          className="hover:shadow-xl transition cursor-pointer"
+        >
+          <CardHeader className="flex flex-row items-center gap-4">
+            <QrCode className="text-blue-600" />
+            <CardTitle>Generate QR Code</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Create your emergency health card and get a downloadable QR.</p>
+          </CardContent>
+        </Card>
 
-        <Button
+        <Card
           onClick={() => navigate("/demo")}
-          variant="outline"
-          className="w-full"
+          className="hover:shadow-xl transition cursor-pointer"
         >
-          🎓 View Demo Profile
-        </Button>
+          <CardHeader className="flex flex-row items-center gap-4">
+            <Eye className="text-green-600" />
+            <CardTitle>View Demo Profile</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>Preview a sample profile to see how your QR data appears.</p>
+          </CardContent>
+        </Card>
 
-        <Button
+        <Card
           onClick={() => navigate("/profile")}
-          variant="secondary"
-          className="w-full"
+          className="hover:shadow-xl transition cursor-pointer"
         >
-          🙍‍♂️ My Profile
-        </Button>
+          <CardHeader className="flex flex-row items-center gap-4">
+            <User className="text-purple-600" />
+            <CardTitle>My Profile</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>View your account details and Firebase UID.</p>
+          </CardContent>
+        </Card>
 
-        <Button
+                <Card
           onClick={handleLogout}
-          variant="destructive"
-          className="w-full"
+          className="hover:shadow-xl transition cursor-pointer border border-red-200 bg-red-50"
         >
-          🚪 Logout
-        </Button>
+          <CardHeader className="flex flex-row items-center gap-4">
+            <LogOut className="text-red-600" />
+            <CardTitle>Logout</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>End session and return to login screen.</p>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

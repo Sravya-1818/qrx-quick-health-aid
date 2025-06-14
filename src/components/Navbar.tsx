@@ -3,7 +3,6 @@ import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
-import clsx from "clsx";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -23,29 +22,29 @@ const Navbar = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+    <nav className="bg-white shadow-sm border-b border-gray-200 px-6 py-3 flex justify-between items-center relative z-50">
       {/* Logo */}
       <div
         onClick={() => navigate("/home")}
-        className="text-2xl font-bold text-blue-600 cursor-pointer"
+        className="text-2xl font-bold text-blue-700 cursor-pointer"
       >
         QRx Health
       </div>
 
-      {/* Desktop Navigation */}
-      <div className="hidden md:flex items-center gap-4">
+      {/* Desktop Menu */}
+      <div className="hidden md:flex items-center space-x-4">
         {user ? (
           <>
             <Link to="/profile">
               <Button
-                variant={isActive("/profile") ? "default" : "outline"}
+                variant={isActive("/profile") ? "default" : "ghost"}
               >
-                Profile
+                My Profile
               </Button>
             </Link>
             <Link to="/edit-profile">
               <Button
-                variant={isActive("/edit-profile") ? "default" : "outline"}
+                variant={isActive("/edit-profile") ? "default" : "ghost"}
               >
                 Edit Profile
               </Button>
@@ -60,20 +59,20 @@ const Navbar = () => {
         ) : (
           <>
             <Link to="/login">
-              <Button variant={isActive("/login") ? "default" : "outline"}>
+              <Button variant={isActive("/login") ? "default" : "ghost"}>
                 Login
               </Button>
             </Link>
             <Link to="/signup">
-              <Button variant={isActive("/signup") ? "default" : "outline"}>
-                Signup
+              <Button variant={isActive("/signup") ? "default" : "ghost"}>
+                Sign Up
               </Button>
             </Link>
           </>
         )}
       </div>
 
-      {/* Mobile Menu Icon */}
+      {/* Mobile Toggle */}
       <button
         className="md:hidden"
         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -81,22 +80,22 @@ const Navbar = () => {
         {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
       </button>
 
-      {/* Mobile Dropdown */}
+      {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white border-t shadow-md flex flex-col px-6 py-4 md:hidden z-50">
+        <div className="absolute top-full left-0 w-full bg-white border-t shadow-md flex flex-col px-6 py-4 md:hidden animate-slideDown">
           {user ? (
             <>
               <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full mb-2" variant={isActive("/profile") ? "default" : "outline"}>
-                  Profile
+                <Button className="w-full mb-2" variant={isActive("/profile") ? "default" : "ghost"}>
+                  My Profile
                 </Button>
               </Link>
               <Link to="/edit-profile" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full mb-2" variant={isActive("/edit-profile") ? "default" : "outline"}>
+                                <Button className="w-full mb-2" variant={isActive("/edit-profile") ? "default" : "ghost"}>
                   Edit Profile
                 </Button>
               </Link>
-              <span className="text-sm text-gray-600 mb-2 text-center">
+              <span className="text-sm text-gray-600 text-center mb-2">
                 {user.displayName || user.email}
               </span>
               <Button className="w-full" variant="destructive" onClick={handleLogout}>
@@ -106,13 +105,13 @@ const Navbar = () => {
           ) : (
             <>
               <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full mb-2" variant={isActive("/login") ? "default" : "outline"}>
+                <Button className="w-full mb-2" variant={isActive("/login") ? "default" : "ghost"}>
                   Login
                 </Button>
               </Link>
               <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full" variant={isActive("/signup") ? "default" : "outline"}>
-                  Signup
+                <Button className="w-full" variant={isActive("/signup") ? "default" : "ghost"}>
+                  Sign Up
                 </Button>
               </Link>
             </>
@@ -124,3 +123,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

@@ -7,6 +7,9 @@ import {
 import { auth } from "@/firebase";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { FcGoogle } from "react-icons/fc";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -14,11 +17,12 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
+    setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       navigate("/home");
@@ -30,6 +34,8 @@ const Signup = () => {
       } else {
         setError("Signup failed: " + err.message);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,57 +50,71 @@ const Signup = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-blue-50">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-sm">
-        <h2 className="text-2xl font-bold mb-4 text-center">Create Account</h2>
-        <form onSubmit={handleSignup} className="flex flex-col gap-4">
-          <input
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-100 to-blue-100 px-4">
+      <div className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-md space-y-6 animate-fadeIn transition-all duration-300">
+        <h2 className="text-3xl font-extrabold text-center text-green-700 tracking-tight">
+          Create Your <span className="text-blue-600">QRx</span> Account
+        </h2>
+
+        <form onSubmit={handleSignup} className="space-y-4">
+          <Input
             type="email"
-            placeholder="Email"
+            placeholder="Enter your email"
             value={email}
             required
             onChange={(e) => setEmail(e.target.value)}
-            className="border p-2 rounded"
+            className="text-sm"
           />
+
           <div className="relative">
-            <input
+            <Input
               type={showPassword ? "text" : "password"}
-              placeholder="Password"
+              placeholder="Create a password"
               value={password}
               required
               onChange={(e) => setPassword(e.target.value)}
-              className="border p-2 rounded w-full pr-10"
+              className="text-sm pr-10"
             />
-            <button
+                        <button
               type="button"
-              className="absolute right-2 top-2 text-gray-500"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
               onClick={() => setShowPassword(!showPassword)}
+              tabIndex={-1}
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && (
+            <p className="text-red-600 text-sm font-medium text-center">
+              {error}
+            </p>
+          )}
 
-          <button
-            type="submit"
-            className="bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
-          >
-            Sign Up
-          </button>
+          <Button type="submit" className="w-full font-semibold text-base" disabled={loading}>
+            {loading ? "Signing up..." : "Sign Up"}
+          </Button>
 
-          <button
+          <div className="flex items-center gap-2">
+            <div className="flex-grow h-px bg-gray-200" />
+            <span className="text-xs text-gray-400">or</span>
+            <div className="flex-grow h-px bg-gray-200" />
+          </div>
+
+          <Button
             type="button"
+            variant="outline"
+            className="w-full flex items-center justify-center gap-2 text-sm"
             onClick={handleGoogleSignup}
-            className="bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
           >
+            <FcGoogle className="text-xl" />
             Sign up with Google
-          </button>
+          </Button>
 
           <p className="text-center text-sm text-gray-600 mt-2">
             Already have an account?{" "}
-            <Link to="/login" className="text-blue-600 hover:underline">
-              Log In
+            <Link to="/login" className="text-blue-600 hover:underline font-medium">
+              Log in
             </Link>
           </p>
         </form>
@@ -104,3 +124,4 @@ const Signup = () => {
 };
 
 export default Signup;
+

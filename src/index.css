@@ -2,16 +2,29 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🧱 Define reusable custom classes in components BEFORE using them */
+/* ---------------------- 🧱 COMPONENTS ---------------------- */
 @layer components {
   .border-border {
-    @apply border border-gray-300;
+    @apply border border-[hsl(var(--border))];
+  }
+
+  .card {
+    @apply bg-card text-card-foreground rounded-lg shadow-sm p-4;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground px-4 py-2 rounded hover:bg-primary/90 transition;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground px-4 py-2 rounded hover:bg-secondary/90 transition;
   }
 }
 
-/* 🌐 Base styles and design tokens */
+/* ---------------------- 🌐 BASE ---------------------- */
 @layer base {
   :root {
+    /* Light Theme Tokens */
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
@@ -53,6 +66,7 @@
   }
 
   .dark {
+    /* Dark Theme Tokens */
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -104,10 +118,10 @@
   }
 }
 
-/* ✨ Custom utilities and animations */
+/* ---------------------- ✨ UTILITIES ---------------------- */
 @layer utilities {
   .animate-fade-in {
-    animation: fade-in 0.8s ease-out;
+    animation: fade-in 0.8s ease-out both;
   }
 
   .animate-scale-in {
@@ -120,6 +134,26 @@
 
   .hover-scale:hover {
     transform: scale(1.05);
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .container-padding {
+    @apply px-4 md:px-6 lg:px-8;
   }
 
   @keyframes fade-in {

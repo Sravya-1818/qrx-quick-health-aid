@@ -7,6 +7,9 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/firebase";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -53,59 +56,70 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-blue-50 px-4">
-      <div className="bg-white p-6 rounded shadow-md w-full max-w-sm space-y-4">
-        <h2 className="text-xl font-bold text-center">Login to QRx</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-green-100 px-4">
+      <div className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-md space-y-6 animate-fadeIn transition-all duration-300">
+        <h2 className="text-3xl font-extrabold text-center text-blue-700 tracking-tight">
+          Login to <span className="text-green-600">QRx</span>
+        </h2>
 
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-2 border rounded"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <div className="space-y-4">
+          <Input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="text-sm"
+          />
+          <Input
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="text-sm"
+          />
 
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-2 border rounded"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button
-          onClick={handleLogin}
-          className={`w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-
-        <button
-          onClick={handleGoogleSignIn}
-          className="w-full bg-red-500 text-white p-2 rounded hover:bg-red-600"
-        >
-          Sign in with Google
-        </button>
-
-        <button
-          onClick={handleResetPassword}
-          className="text-sm text-blue-600 hover:underline w-full text-center"
-        >
-          Forgot Password?
-        </button>
-
-        <p className="text-sm text-center">
-          Don’t have an account?{" "}
-          <span
-            className="text-blue-600 hover:underline cursor-pointer"
-            onClick={() => navigate("/signup")}
+          <Button
+            className="w-full font-semibold text-base"
+            onClick={handleLogin}
+            disabled={loading}
           >
-            Sign up
-          </span>
-        </p>
+            {loading ? "Logging in..." : "Login"}
+          </Button>
+
+          <div className="flex items-center gap-2">
+            <div className="flex-grow h-px bg-gray-200" />
+            <span className="text-xs text-gray-400">or</span>
+            <div className="flex-grow h-px bg-gray-200" />
+          </div>
+
+          <Button
+            variant="outline"
+            className="w-full flex items-center justify-center gap-2 text-sm"
+            onClick={handleGoogleSignIn}
+          >
+            <FcGoogle className="text-xl" />
+            Sign in with Google
+          </Button>
+        </div>
+
+        <div className="text-sm text-center space-y-2">
+          <button
+            className="text-blue-600 hover:underline font-medium"
+            onClick={handleResetPassword}
+          >
+            Forgot Password?
+          </button>
+
+          <p className="text-gray-600">
+            Don’t have an account?{" "}
+            <span
+              className="text-blue-600 font-medium hover:underline cursor-pointer"
+              onClick={() => navigate("/signup")}
+            >
+              Sign up
+            </span>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: "class", // ⬅️ Enables `dark` class for dark theme switching
   theme: {
     extend: {
       colors: {
@@ -27,7 +28,7 @@ export default {
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
 
-        // Sidebar colors (if used)
+        // Optional sidebar system
         "sidebar-background": "hsl(var(--sidebar-background))",
         "sidebar-foreground": "hsl(var(--sidebar-foreground))",
         "sidebar-primary": "hsl(var(--sidebar-primary))",
@@ -44,6 +45,3 @@ export default {
   },
   plugins: [],
 };
-
-
-
