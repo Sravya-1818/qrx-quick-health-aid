@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ArrowRight, LogOut, UserCircle } from 'lucide-react';
+import { LogOut, UserCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/firebase';
 
-import { Card, CardContent } from "@/components/ui/card";
+// Components
 import { Button } from "@/components/ui/button";
 import HeroSection from '@/components/HeroSection';
 import HowItWorks from '@/components/HowItWorks';
@@ -15,24 +15,43 @@ import Footer from '@/components/Footer';
 const Index = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true); // ✅ Added loading state
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(false); // ✅ Set loading to false after checking auth
     });
     return () => unsubscribe();
   }, []);
 
   const handleLogout = async () => {
-    await signOut(auth);
-    navigate('/'); // redirect to landing page
+    try {
+      await signOut(auth);
+      navigate('/');
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-gray-600 text-lg">Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
       {/* 🔵 Navbar */}
       <header className="w-full bg-white shadow-md py-4 px-6 flex justify-between items-center">
-        <div className="text-2xl font-bold text-blue-700">QRx</div>
+        <div
+          className="text-2xl font-bold text-blue-700 cursor-pointer"
+          onClick={() => navigate('/home')}
+        >
+          QRx
+        </div>
         <div className="flex items-center gap-4">
           {user && (
             <>
@@ -52,15 +71,18 @@ const Index = () => {
         </div>
       </header>
 
-      {/* 💡 Page Content */}
-      <HeroSection />
-      <HowItWorks />
-      <BenefitsSection />
-      <TestimonialsSection />
+      {/* 💡 Main Sections */}
+      {HeroSection && <HeroSection />}
+      {HowItWorks && <HowItWorks />}
+      {BenefitsSection && <BenefitsSection />}
+      {TestimonialsSection && <TestimonialsSection />}
 
       {/* 📝 Feedback Button */}
       <div className="flex justify-center my-10">
-        <Button onClick={() => navigate('/feedback')} className="bg-indigo-600 text-white hover:bg-indigo-700">
+        <Button
+          onClick={() => navigate('/feedback')}
+          className="bg-indigo-600 text-white hover:bg-indigo-700"
+        >
           Give Feedback
         </Button>
       </div>
