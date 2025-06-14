@@ -11,7 +11,9 @@ import QRGenerator from "./pages/QRGenerator";
 import UserProfile from "./pages/UserProfile";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+
 import NotFound from "./pages/NotFound";
+
 
 const queryClient = new QueryClient();
 
