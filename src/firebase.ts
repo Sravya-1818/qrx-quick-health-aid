@@ -26,3 +26,24 @@ const googleProvider = new GoogleAuthProvider();
 
 // ✅ Export all services from one place
 export { db, auth, storage, googleProvider };
+
+// ✅ Suggested Firestore Security Rules (to be set manually in Firebase Console):
+/*
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Private user profiles
+    match /users/{userId} {
+      allow read, update, delete: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null;
+    }
+
+    // Public profile data for QR emergency access
+    match /publicProfiles/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+*/

@@ -4,10 +4,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Download, User, Heart, Phone, Shield } from 'lucide-react';
+import { ArrowLeft, Download, User, Heart, Phone, Shield, Printer } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { UserData, updateUserData, generateQRCodeUrl } from '@/services/userData';
+import { UserData, saveUserData, generateQRCodeUrl } from '@/services/userData';
 import { useToast } from "@/hooks/use-toast";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 
 const QRGenerator = () => {
   const [formData, setFormData] = useState<Partial<UserData>>({
@@ -81,6 +83,18 @@ const QRGenerator = () => {
     link.click();
   };
 
+  const downloadPDF = async () => {
+    const cardElement = document.getElementById('healthCard');
+    if (!cardElement) return;
+    const canvas = await html2canvas(cardElement);
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const width = 180;
+    const x = (210 - width) / 2;
+    pdf.addImage(imgData, 'PNG', x, 40, width, 120);
+    pdf.save(`QRx-${formData.name || 'HealthCard'}.pdf`);
+  };
+
   if (generatedUserId && qrCodeUrl) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 py-8">
@@ -97,15 +111,43 @@ const QRGenerator = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-white p-6 rounded-lg inline-block shadow-lg">
-                <img src={qrCodeUrl} alt="QR Code" className="mx-auto mb-4" />
-                <p className="text-sm text-gray-600">Scan this code for emergency info</p>
+
+              {/* QR Health Card */}
+              <div
+                id="healthCard"
+                className="bg-white p-6 rounded-2xl shadow-2xl border border-blue-300 w-full max-w-md mx-auto print:w-full"
+              >
+                <h2 className="text-xl font-bold text-center text-blue-700 mb-4 underline">
+                  🆘 Emergency Health Card
+                </h2>
+
+                <div className="text-left text-sm text-gray-800 space-y-1">
+                  <p><strong>Name:</strong> {formData.name}</p>
+                  <p><strong>Age:</strong> {formData.age}</p>
+                  <p><strong>Blood Group:</strong> {formData.bloodGroup}</p>
+                  <p><strong>Allergies:</strong> {formData.allergies?.join(', ') || 'None'}</p>
+                  <p><strong>Conditions:</strong> {formData.medicalConditions?.join(', ') || 'None'}</p>
+                  <p><strong>Medications:</strong> {formData.medications?.join(', ') || 'None'}</p>
+                  <p><strong>Emergency Contact:</strong> {formData.emergencyContact?.name} ({formData.emergencyContact?.relation}) - {formData.emergencyContact?.phone}</p>
+                </div>
+
+                <div className="flex justify-center mt-4">
+                  <div className="bg-white p-2 border-2 border-dashed border-gray-400 rounded-lg">
+                    <img src={qrCodeUrl} alt="QR Code" className="w-32 h-32" />
+                  </div>
+                </div>
               </div>
 
+              {/* Buttons */}
               <div className="space-y-4">
                 <Button onClick={downloadQR} className="w-full">
                   <Download className="mr-2 h-4 w-4" />
-                  Download QR Code
+                  Download QR Code Image
+                </Button>
+
+                <Button onClick={downloadPDF} variant="outline" className="w-full">
+                  <Printer className="mr-2 h-4 w-4" />
+                  Download Health Card (PDF)
                 </Button>
 
                 <div className="text-sm text-gray-600">
