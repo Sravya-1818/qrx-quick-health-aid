@@ -15,6 +15,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
+import Feedback from "@/pages/Feedback";
+
 
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -71,6 +73,9 @@ const App = () => {
 
             {/* 404 Fallback */}
             <Route path="*" element={<NotFound />} />
+
+// inside <Routes>
+<Route path="/feedback" element={<Feedback />} />
 
           </Routes>
         </Router>
