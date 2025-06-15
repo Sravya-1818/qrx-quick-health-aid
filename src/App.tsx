@@ -4,6 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "@/context/AuthContext";
 import { Suspense, lazy } from "react";
+import PrintStore from '@/pages/printstore';
+
+
 
 // Lazy-load Pages
 const Landing = lazy(() => import("@/pages/Landing"));
@@ -51,6 +54,8 @@ const App = () => {
 
                 {/* Not Found */}
                 <Route path="*" element={<NotFound />} />
+                // Inside your Routes
+<Route path="/printstore" element={<PrintStore />} />
               </Routes>
             </Suspense>
           </BrowserRouter>
