@@ -1,75 +1,63 @@
-# Welcome to your Lovable project
+# 🩺 QRx – Quick Health Aid
 
-## Project info
+A smart health profile and emergency QR access web application to securely store and share critical medical information when it matters most.
 
-**URL**: https://lovable.dev/projects/ef48a7bb-e0a0-4337-944d-dffbafad41ae
+---
 
-## How can I edit this code?
+## 🔗 Live App
 
-There are several ways of editing your application.
+👉 [Visit QRx Web App](https://qrx-quick-health-aid.vercel.app)
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/ef48a7bb-e0a0-4337-944d-dffbafad41ae) and start prompting.
+## 📋 Project Overview
 
-Changes made via Lovable will be committed automatically to this repo.
+**QRx** allows users to:
 
-**Use your preferred IDE**
+- Create a personal digital health profile  
+- Store emergency contacts, allergies, medications, and medical conditions  
+- Instantly generate a **QR code** linking to their profile  
+- Share the QR for quick access in emergencies (ambulance, hospital, etc.)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+---
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🧰 Tech Stack
 
-Follow these steps:
+| Layer         | Technology                        |
+|---------------|------------------------------------|
+| Frontend      | React + TypeScript + Vite          |
+| Styling       | Tailwind CSS + Shadcn UI           |
+| Backend       | Firebase Firestore (NoSQL DB)      |
+| Auth          | Firebase Authentication            |
+| QR Generator  | `api.qrserver.com`                 |
+| Deployment    | Vercel                             |
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+---
+---
+🛡️ Project Features
+- 🔒 Firebase-secured user authentication
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- 👤 Editable user health profile with structured fields
 
-# Step 3: Install the necessary dependencies.
-npm i
+- 📱 Dynamic QR code generation
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- 🌐 Responsive design for mobile & desktop
 
-**Edit a file directly in GitHub**
+- ⚡ Fast and lightweight deployment on Vercel
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+--- 
+🤝 Contributing
+Fork the repo
 
-**Use GitHub Codespaces**
+- Create your feature branch (git checkout -b feature/new-feature)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+- Commit your changes
 
-## What technologies are used for this project?
+- Push to the branch
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/ef48a7bb-e0a0-4337-944d-dffbafad41ae) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
-
-##testing
+- Open a Pull Request 🚀
+---
+🙋‍♀️ Made by
+-Yesilanka Veera Sai Sindhu
+-Feel free to connect: LinkedIn
+---
