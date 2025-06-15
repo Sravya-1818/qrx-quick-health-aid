@@ -75,13 +75,13 @@ We welcome contributions!
 
 
 
-| Name                  | Role                               |
-|-----------------------|------------------------------------|
-|Sindhu Yesilanka       | 	Backend & Database Manager        |
-| Sravya Valluri        |	UI/UX Designer                    |
-|Sai Durga Manku        | Project Lead & Frontend Developer  |
-| Divya Pattamsetti	   | Outreach & Presentation Strategist |
-| Keerthi Yalagana      | Healthcare Research Analyst        |
+| Name                  | Role                               |  Linkedin Profile                                     | 
+|-----------------------|------------------------------------|-------------------------------------------------------|
+|Sindhu Yesilanka       | 	Backend & Database Manager        |[Linkedin](linkedin.com/in/sindhu-yesilanka-40a12b317) |
+| Sravya Valluri        |	UI/UX Designer                    |[Linkedin](linkedin.com/in/sravyavalluri-44a335297)    |
+|Sai Durga Manku        | Project Lead & Frontend Developer  |[Linkedin](linkedin.com/in/sai-durga-751a13292)        |
+| Divya Pattamsetti	   | Outreach & Presentation Strategist |[Linkedin](linkedin.com/in/divya-patamsetti-5a09892a1) |
+| Keerthi Yalagana      | Healthcare Research Analyst        |[Linkedin](linkedin.com/in/keerthi-yalagana-ba40ba326) |
 
 
 
