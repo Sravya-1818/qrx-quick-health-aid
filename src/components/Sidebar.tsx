@@ -9,6 +9,8 @@ const Sidebar = () => {
     { name: "Generate", path: "/generate", icon: "🔍" },
     { name: "Profile", path: "/profile", icon: "👤" },
     { name: "Feedback", path: "/feedback", icon: "💬" },
+     { name: "Print Store", path: "/printstore" },
+    
   ];
 
   return (
