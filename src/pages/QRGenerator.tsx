@@ -10,6 +10,7 @@ import { UserData, saveUserData, generateQRCodeUrl } from '@/services/userData';
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { QRCodeCanvas } from 'qrcode.react'; 
 
 const QRGenerator = () => {
   const [formData, setFormData] = useState<Partial<UserData>>({
@@ -110,7 +111,17 @@ const QRGenerator = () => {
                   <div id="healthCard" className="p-6 bg-gray-50 rounded-lg border text-sm">
                     <h2 className="text-center font-bold text-lg text-red-600 mb-4">QRx Emergency Health Card</h2>
                     <div className="flex justify-center mb-4">
-                      <img src={qrCodeUrl} alt="QR Code" className="h-36 w-36 border p-1" crossOrigin="anonymous" />
+                     
+<div className="flex justify-center mb-4">
+  <QRCodeCanvas
+    value={qrCodeUrl}
+    size={144}
+    bgColor="#ffffff"
+    fgColor="#000000"
+    level="H"
+    includeMargin={true}
+  />
+</div>
                     </div>
                     <p><strong>Name:</strong> {formData.name}</p>
                     <p><strong>Age:</strong> {formData.age}</p>
