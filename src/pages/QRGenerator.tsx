@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Download, User, Heart, Phone, Shield, Printer } from 'lucide-react';
+import { ArrowLeft, Printer, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { UserData, saveUserData, generateQRCodeUrl } from '@/services/userData';
 import { useToast } from "@/hooks/use-toast";
@@ -13,20 +13,9 @@ import jsPDF from 'jspdf';
 
 const QRGenerator = () => {
   const [formData, setFormData] = useState<Partial<UserData>>({
-    name: '',
-    age: 0,
-    bloodGroup: '',
-    allergies: [],
-    medicalConditions: [],
-    medications: [],
-    emergencyContact: {
-      name: '',
-      phone: '',
-      relation: ''
-    }
+    name: '', age: 0, bloodGroup: '', allergies: [], medicalConditions: [], medications: [],
+    emergencyContact: { name: '', phone: '', relation: '' }
   });
-
-  const [generatedUserId, setGeneratedUserId] = useState<string>('');
   const [qrCodeUrl, setQRCodeUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
@@ -54,165 +43,90 @@ const QRGenerator = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
       const userId = `${formData.name?.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}`;
       await saveUserData(userId, formData as UserData);
-      setGeneratedUserId(userId);
-      setQRCodeUrl(generateQRCodeUrl(userId));
 
-      toast({
-        title: "QR Code Generated Successfully!",
-        description: "Your emergency health profile is ready.",
-      });
+      const qrUrl = generateQRCodeUrl(userId);
+      setQRCodeUrl(qrUrl);
+
+      // ✅ Save data to localStorage for Profile reuse
+      localStorage.setItem("qrData", JSON.stringify({
+        userData: formData,
+        qrCodeUrl: qrUrl
+      }));
+
+      toast({ title: "QR Code Generated!", description: "Emergency profile is ready." });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to generate QR code. Please try again.",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to generate QR code.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const downloadQR = async () => {
-    if (!qrCodeUrl) return;
-    const response = await fetch(qrCodeUrl);
-    const blob = await response.blob();
-    const url = URL.createObjectURL(blob);
-
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `QRx-${formData.name || 'Emergency'}-Health-ID.png`;
-    link.click();
-
-    URL.revokeObjectURL(url);
-  };
-
   const downloadPDF = async () => {
-    const cardElement = document.getElementById('healthCard');
-    if (!cardElement) return;
-
-    const canvas = await html2canvas(cardElement, { scale: 2, useCORS: true });
+    const card = document.getElementById('healthCard');
+    if (!card) return;
+    const canvas = await html2canvas(card, { scale: 2, useCORS: true });
     const imgData = canvas.toDataURL('image/png');
-
     const pdf = new jsPDF('p', 'mm', 'a4');
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const imgProps = pdf.getImageProperties(imgData);
-    const imgWidth = pdfWidth - 30; // margins
-    const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-
-    pdf.addImage(imgData, 'PNG', 15, 30, imgWidth, imgHeight);
+    const width = pdf.internal.pageSize.getWidth() - 30;
+    const height = (canvas.height * width) / canvas.width;
+    pdf.addImage(imgData, 'PNG', 15, 30, width, height);
     pdf.save(`QRx-${formData.name || 'HealthCard'}.pdf`);
   };
 
-
-    return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <Link to="/" className="flex items-center text-blue-600 mb-6 hover:underline">
-        <ArrowLeft className="mr-2 w-5 h-5" /> Back to Home
+  return (
+    <div className="max-w-5xl mx-auto px-6 py-10 animate-fade-in">
+      <Link to="/" className="flex items-center text-blue-500 hover:underline mb-8">
+        <ArrowLeft className="w-5 h-5 mr-2" /> Back to Home
       </Link>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold flex items-center gap-2">
-            <Shield className="w-6 h-6 text-red-600" /> Emergency Health QR Generator
+      <Card className="shadow-xl rounded-2xl border border-gray-200">
+        <CardHeader className="bg-gradient-to-r from-red-500 to-red-700 rounded-t-2xl text-white p-6">
+          <CardTitle className="text-3xl font-bold flex items-center gap-3">
+            <Shield className="w-7 h-7" /> Emergency Health QR Generator
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-6 bg-white">
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left Column - Personal Details */}
             <div className="space-y-4">
-              <Label>Name</Label>
-              <Input
-                value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                required
-              />
-
-              <Label>Age</Label>
-              <Input
-                type="number"
-                value={formData.age}
-                onChange={(e) => handleInputChange("age", parseInt(e.target.value))}
-                required
-              />
-
-              <Label>Blood Group</Label>
-              <Input
-                value={formData.bloodGroup}
-                onChange={(e) => handleInputChange("bloodGroup", e.target.value)}
-                required
-              />
-
-              <Label>Allergies (comma-separated)</Label>
-              <Textarea
-                value={formData.allergies?.join(', ')}
-                onChange={(e) => handleArrayInput("allergies", e.target.value)}
-              />
-
-              <Label>Medical Conditions (comma-separated)</Label>
-              <Textarea
-                value={formData.medicalConditions?.join(', ')}
-                onChange={(e) => handleArrayInput("medicalConditions", e.target.value)}
-              />
-
-              <Label>Medications (comma-separated)</Label>
-              <Textarea
-                value={formData.medications?.join(', ')}
-                onChange={(e) => handleArrayInput("medications", e.target.value)}
-              />
+              <div><Label>Name</Label><Input value={formData.name} onChange={(e) => handleInputChange("name", e.target.value)} required /></div>
+              <div><Label>Age</Label><Input type="number" value={formData.age} onChange={(e) => handleInputChange("age", parseInt(e.target.value))} required /></div>
+              <div><Label>Blood Group</Label><Input value={formData.bloodGroup} onChange={(e) => handleInputChange("bloodGroup", e.target.value)} required /></div>
+              <div><Label>Allergies</Label><Textarea value={formData.allergies?.join(', ')} onChange={(e) => handleArrayInput("allergies", e.target.value)} /></div>
+              <div><Label>Medical Conditions</Label><Textarea value={formData.medicalConditions?.join(', ')} onChange={(e) => handleArrayInput("medicalConditions", e.target.value)} /></div>
+              <div><Label>Medications</Label><Textarea value={formData.medications?.join(', ')} onChange={(e) => handleArrayInput("medications", e.target.value)} /></div>
             </div>
-
-            {/* Right Column - Emergency Contact & Actions */}
             <div className="space-y-4">
-              <Label>Emergency Contact Name</Label>
-              <Input
-                value={formData.emergencyContact?.name}
-                onChange={(e) => handleInputChange("emergencyContact.name", e.target.value)}
-              />
-
-              <Label>Emergency Contact Phone</Label>
-              <Input
-                value={formData.emergencyContact?.phone}
-                onChange={(e) => handleInputChange("emergencyContact.phone", e.target.value)}
-              />
-
-              <Label>Emergency Contact Relation</Label>
-              <Input
-                value={formData.emergencyContact?.relation}
-                onChange={(e) => handleInputChange("emergencyContact.relation", e.target.value)}
-              />
-
-              <Button type="submit" disabled={isLoading} className="mt-4 w-full">
+              <div><Label>Emergency Contact Name</Label><Input value={formData.emergencyContact?.name} onChange={(e) => handleInputChange("emergencyContact.name", e.target.value)} /></div>
+              <div><Label>Emergency Contact Phone</Label><Input value={formData.emergencyContact?.phone} onChange={(e) => handleInputChange("emergencyContact.phone", e.target.value)} /></div>
+              <div><Label>Emergency Contact Relation</Label><Input value={formData.emergencyContact?.relation} onChange={(e) => handleInputChange("emergencyContact.relation", e.target.value)} /></div>
+              <Button type="submit" disabled={isLoading} className="w-full mt-4 transition duration-300 hover:scale-105">
                 {isLoading ? "Generating..." : "Generate QR"}
               </Button>
-
               {qrCodeUrl && (
-                <div className="mt-6 space-y-4">
-                  <div id="healthCard" className="border rounded-xl p-4 shadow-md bg-white text-center">
-                    <h2 className="text-lg font-semibold mb-2">Your Emergency QR Health ID</h2>
-                    <img
-                      src={qrCodeUrl}
-                      alt="QR Code"
-                      className="mx-auto h-40 w-40"
-                      crossOrigin="anonymous"
-                    />
-                    <p className="mt-2 text-sm text-gray-600">
-                      Name: {formData.name} <br />
-                      Age: {formData.age} <br />
-                      Blood Group: {formData.bloodGroup} <br />
-                      Emergency Contact: {formData.emergencyContact?.name} ({formData.emergencyContact?.relation}) - {formData.emergencyContact?.phone}
-                    </p>
+                <div className="mt-6 space-y-4 animate-fade-in">
+                  <div id="healthCard" className="p-6 bg-gray-50 rounded-lg border text-sm">
+                    <h2 className="text-center font-bold text-lg text-red-600 mb-4">QRx Emergency Health Card</h2>
+                    <div className="flex justify-center mb-4">
+                      <img src={qrCodeUrl} alt="QR Code" className="h-36 w-36 border p-1" crossOrigin="anonymous" />
+                    </div>
+                    <p><strong>Name:</strong> {formData.name}</p>
+                    <p><strong>Age:</strong> {formData.age}</p>
+                    <p><strong>Blood Group:</strong> {formData.bloodGroup}</p>
+                    <p><strong>Allergies:</strong> {formData.allergies?.join(', ') || 'None'}</p>
+                    <p><strong>Medical Conditions:</strong> {formData.medicalConditions?.join(', ') || 'None'}</p>
+                    <p><strong>Medications:</strong> {formData.medications?.join(', ') || 'None'}</p>
+                    <p><strong>Emergency Contact:</strong> {formData.emergencyContact?.name} ({formData.emergencyContact?.relation}) - {formData.emergencyContact?.phone}</p>
+                    <p className="text-center text-gray-500 text-xs mt-2">Scan QR for emergency access</p>
                   </div>
-
-                  <div className="flex gap-4 justify-center">
-                    <Button onClick={downloadQR} variant="outline">
-                      <Download className="mr-2 w-4 h-4" /> Download QR
-                    </Button>
+                  <div className="flex justify-center gap-4">
+                    <Link to="/printstore">
+                      <Button variant="outline"><Printer className="mr-2 w-4 h-4" /> Print Your QR</Button>
+                    </Link>
                     <Button onClick={downloadPDF} variant="default">
-                                            <Printer className="mr-2 w-4 h-4" /> Download PDF
+                      <Printer className="mr-2 w-4 h-4" /> Download PDF
                     </Button>
                   </div>
                 </div>
@@ -226,4 +140,3 @@ const QRGenerator = () => {
 };
 
 export default QRGenerator;
-
