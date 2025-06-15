@@ -8,7 +8,7 @@ const Sidebar = () => {
     { name: "Home", path: "/home", icon: "🏠" },
     { name: "Generate", path: "/generate", icon: "🔍" },
     { name: "Profile", path: "/profile", icon: "👤" },
-    { name: "Edit Profile", path: "/edit-profile", icon: "✏️" },
+
     { name: "Feedback", path: "/feedback", icon: "💬" },
   ];
 
