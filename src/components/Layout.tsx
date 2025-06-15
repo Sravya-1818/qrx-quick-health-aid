@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar"; // 🧭 Import Sidebar component
+import Sidebar from "./Sidebar"; // 🧭 Import Sidebar
 
 const Layout = () => {
+  const [showSidebar, setShowSidebar] = useState(false);
+
   return (
     <div className="flex min-h-screen bg-background text-foreground">
-      {/* 🔹 Sidebar for navigation */}
-      <Sidebar />
+      {/* Sidebar (toggle based on showSidebar or always show on sm+) */}
+      <Sidebar visible={showSidebar} onClose={() => setShowSidebar(false)} />
 
-      {/* 🔹 Right side: Topbar + Main content */}
       <div className="flex flex-col flex-1">
-        {/* Optional top navbar/header */}
+        {/* Topbar with 3-dot menu */}
         <header className="p-4 border-b border-border flex justify-between items-center">
           <h1 className="text-lg font-semibold">Dashboard</h1>
+          <button
+            onClick={() => setShowSidebar((prev) => !prev)}
+            className="sm:hidden p-2 text-xl"
+          >
+            ⋮
+          </button>
         </header>
 
-        {/* 🔹 Main content rendered via React Router's <Outlet /> */}
         <main className="flex-1 p-6 overflow-y-auto">
           <Outlet />
         </main>
