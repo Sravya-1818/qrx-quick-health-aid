@@ -75,37 +75,23 @@ We welcome contributions!
 
 
 
-Name	Role
+| Name                  | Role                               |
+|-----------------------|------------------------------------|
+|Sindhu Yesilanka       | 	Backend & Database Manager        |
+| Sravya Valluri        |	UI/UX Designer                    |
+|Sai Durga Manku        | Project Lead & Frontend Developer  |
+| Divya Pattamsetti	   | Outreach & Presentation Strategist |
+| Keerthi Yalagana      | Healthcare Research Analyst        |
 
-Sindhu Yesilanka	Backend & Database Manager
-Sravya Valluri	UI/UX Designer
-Sai Durga Manku	Project Lead & Frontend Developer
-Divya Pattamsetti	Outreach & Presentation Strategist
-Keerthi Yalagana	Healthcare Research Analyst
 
 
 
----
+
+
 
 🌐 Connect With Us
 
 Feel free to reach out to any of us on LinkedIn and don't forget to ⭐ the repo if you liked our project.
 
 
----
 
----
-
-### ✅ How to Use:
-1. Open your GitHub repo
-2. Go to README.md
-3. Click the ✏ edit button
-4. Replace the entire content with the above
-5. Click *"Commit changes"*
-
-Let me know if you want to add:
-- Screenshots  
-- GitHub profile links for each member  
-- Hackathon participation details
-
-I'm happy to help!
