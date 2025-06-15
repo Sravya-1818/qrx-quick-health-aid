@@ -47,7 +47,7 @@ const DemoProfile = () => {
             </div>
 
             <div className="text-center">
-              <Button className="w-full sm:w-auto" onClick={() => navigate("/edit-profile")}>
+              <Button className="w-full sm:w-auto" onClick={() => navigate("/generate")}>
                 🚀 Fill My Profile Now
               </Button>
             </div>
