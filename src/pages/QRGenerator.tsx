@@ -10,7 +10,6 @@ import { UserData, saveUserData, generateQRCodeUrl } from '@/services/userData';
 import { useToast } from "@/hooks/use-toast";
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { QRCodeCanvas } from 'qrcode.react'; 
 
 const QRGenerator = () => {
   const [formData, setFormData] = useState<Partial<UserData>>({
@@ -45,12 +44,13 @@ const QRGenerator = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const userId = ${formData.name?.replace(/\s+/g, '_').toLowerCase()}_${Date.now()};
+      const userId = `${formData.name?.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}`;
       await saveUserData(userId, formData as UserData);
 
       const qrUrl = generateQRCodeUrl(userId);
       setQRCodeUrl(qrUrl);
 
+      // ✅ Save data to localStorage for Profile reuse
       localStorage.setItem("qrData", JSON.stringify({
         userData: formData,
         qrCodeUrl: qrUrl
@@ -73,7 +73,7 @@ const QRGenerator = () => {
     const width = pdf.internal.pageSize.getWidth() - 30;
     const height = (canvas.height * width) / canvas.width;
     pdf.addImage(imgData, 'PNG', 15, 30, width, height);
-    pdf.save(QRx-${formData.name || 'HealthCard'}.pdf);
+    pdf.save(`QRx-${formData.name || 'HealthCard'}.pdf`);
   };
 
   return (
@@ -88,7 +88,6 @@ const QRGenerator = () => {
             <Shield className="w-7 h-7" /> Emergency Health QR Generator
           </CardTitle>
         </CardHeader>
-
         <CardContent className="p-6 bg-white">
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-4">
@@ -99,7 +98,6 @@ const QRGenerator = () => {
               <div><Label>Medical Conditions</Label><Textarea value={formData.medicalConditions?.join(', ')} onChange={(e) => handleArrayInput("medicalConditions", e.target.value)} /></div>
               <div><Label>Medications</Label><Textarea value={formData.medications?.join(', ')} onChange={(e) => handleArrayInput("medications", e.target.value)} /></div>
             </div>
-
             <div className="space-y-4">
               <div><Label>Emergency Contact Name</Label><Input value={formData.emergencyContact?.name} onChange={(e) => handleInputChange("emergencyContact.name", e.target.value)} /></div>
               <div><Label>Emergency Contact Phone</Label><Input value={formData.emergencyContact?.phone} onChange={(e) => handleInputChange("emergencyContact.phone", e.target.value)} /></div>
@@ -107,23 +105,13 @@ const QRGenerator = () => {
               <Button type="submit" disabled={isLoading} className="w-full mt-4 transition duration-300 hover:scale-105">
                 {isLoading ? "Generating..." : "Generate QR"}
               </Button>
-
               {qrCodeUrl && (
                 <div className="mt-6 space-y-4 animate-fade-in">
                   <div id="healthCard" className="p-6 bg-gray-50 rounded-lg border text-sm">
                     <h2 className="text-center font-bold text-lg text-red-600 mb-4">QRx Emergency Health Card</h2>
-
                     <div className="flex justify-center mb-4">
-                      <QRCodeCanvas
-                        value={qrCodeUrl}
-                        size={144}
-                        bgColor="#ffffff"
-                        fgColor="#000000"
-                        level="H"
-                        includeMargin={true}
-                      />
+                      <img src={qrCodeUrl} alt="QR Code" className="h-36 w-36 border p-1" crossOrigin="anonymous" />
                     </div>
-
                     <p><strong>Name:</strong> {formData.name}</p>
                     <p><strong>Age:</strong> {formData.age}</p>
                     <p><strong>Blood Group:</strong> {formData.bloodGroup}</p>
@@ -133,7 +121,6 @@ const QRGenerator = () => {
                     <p><strong>Emergency Contact:</strong> {formData.emergencyContact?.name} ({formData.emergencyContact?.relation}) - {formData.emergencyContact?.phone}</p>
                     <p className="text-center text-gray-500 text-xs mt-2">Scan QR for emergency access</p>
                   </div>
-
                   <div className="flex justify-center gap-4">
                     <Link to="/printstore">
                       <Button variant="outline"><Printer className="mr-2 w-4 h-4" /> Print Your QR</Button>
