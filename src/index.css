@@ -4,9 +4,7 @@
 
 /* ---------------------- 🧱 COMPONENTS ---------------------- */
 @layer components {
-  .border-border {
-    @apply border border-[hsl(var(--border))];
-  }
+ 
 
   .card {
     @apply bg-card text-card-foreground rounded-lg shadow-sm p-4;
