@@ -18,7 +18,7 @@ const ProfilePage = () => {
     const saved = localStorage.getItem('qrData');
     if (saved) {
       setQrData(JSON.parse(saved));
-    });
+    }
   }, []);
 
   const downloadPDF = async () => {
@@ -31,7 +31,8 @@ const ProfilePage = () => {
     const width = pdf.internal.pageSize.getWidth() - 30;
     const height = (canvas.height * width) / canvas.width;
     pdf.addImage(imgData, 'PNG', 15, 30, width, height);
-    pdf.save(QRx-${qrData?.userData?.name || 'HealthCard'}.pdf);
+    pdf.save(`QRx-${qrData?.userData?.name || 'HealthCard'}.pdf`);
+
   };
 
   if (!qrData) {
