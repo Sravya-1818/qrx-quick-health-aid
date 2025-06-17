@@ -36,9 +36,7 @@ const ProfilePage = () => {
   if (!qrData) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 px-4 text-center">
-        <p className="text-gray-600 text-lg">
-          No profile data found. Please generate your QR first.
-        </p>
+        <p className="text-gray-600 text-lg">No profile data found. Please generate your QR first.</p>
         <Link to="/generate">
           <Button className="mt-4 bg-gradient-to-r from-red-500 to-pink-500 text-white shadow-md hover:scale-105 transition-transform duration-200">
             Go to QR Generator
@@ -70,30 +68,12 @@ const ProfilePage = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800 font-medium">
-          <p>
-            <span className="font-semibold text-red-600">Name:</span>{' '}
-            {userData.name}
-          </p>
-          <p>
-            <span className="font-semibold text-red-600">Age:</span>{' '}
-            {userData.age}
-          </p>
-          <p>
-            <span className="font-semibold text-red-600">Blood Group:</span>{' '}
-            {userData.bloodGroup}
-          </p>
-          <p>
-            <span className="font-semibold text-red-600">Allergies:</span>{' '}
-            {userData.allergies?.join(', ') || 'None'}
-          </p>
-          <p>
-            <span className="font-semibold text-red-600">Medical Conditions:</span>{' '}
-            {userData.medicalConditions?.join(', ') || 'None'}
-          </p>
-          <p>
-            <span className="font-semibold text-red-600">Medications:</span>{' '}
-            {userData.medications?.join(', ') || 'None'}
-          </p>
+          <p><span className="font-semibold text-red-600">Name:</span> {userData.name}</p>
+          <p><span className="font-semibold text-red-600">Age:</span> {userData.age}</p>
+          <p><span className="font-semibold text-red-600">Blood Group:</span> {userData.bloodGroup}</p>
+          <p><span className="font-semibold text-red-600">Allergies:</span> {userData.allergies?.join(', ') || 'None'}</p>
+          <p><span className="font-semibold text-red-600">Medical Conditions:</span> {userData.medicalConditions?.join(', ') || 'None'}</p>
+          <p><span className="font-semibold text-red-600">Medications:</span> {userData.medications?.join(', ') || 'None'}</p>
           <p className="sm:col-span-2">
             <span className="font-semibold text-red-600">Emergency Contact:</span>{' '}
             {userData.emergencyContact?.name} ({userData.emergencyContact?.relation}) -{' '}
