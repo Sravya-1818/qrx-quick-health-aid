@@ -20,7 +20,8 @@ const BloodGroupBadge = ({ group }: { group: string }) => {
   const color = colorMap[group] || 'bg-gray-500';
 
   return (
-    <span className={text-white text-xs px-3 py-1 rounded-full ${color}}>
+    <span className={`text-white text-xs px-3 py-1 rounded-full ${color}`}>
+
       🩸 {group}
     </span>
   );
