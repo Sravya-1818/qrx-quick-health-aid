@@ -18,7 +18,7 @@ const ProfilePage = () => {
     const saved = localStorage.getItem('qrData');
     if (saved) {
       setQrData(JSON.parse(saved));
-    }
+    });
   }, []);
 
   const downloadPDF = async () => {
