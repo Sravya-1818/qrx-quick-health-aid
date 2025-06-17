@@ -21,17 +21,20 @@ const ProfilePage = () => {
   }, []);
 
   const downloadPDF = async () => {
-    const card = document.getElementById('profileCard');
-    if (!card) return;
+  const card = document.getElementById('profileCard');
+  if (!card) return;
 
-    const canvas = await html2canvas(card, { scale: 2, useCORS: true });
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const width = pdf.internal.pageSize.getWidth() - 30;
-    const height = (canvas.height * width) / canvas.width;
-    pdf.addImage(imgData, 'PNG', 15, 30, width, height);
-    pdf.save(`QRx-${qrData?.userData?.name || 'HealthCard'}.pdf`);
-  };
+  const canvas = await html2canvas(card, { scale: 2, useCORS: true });
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const width = pdf.internal.pageSize.getWidth() - 30;
+  const height = (canvas.height * width) / canvas.width;
+  pdf.addImage(imgData, 'PNG', 15, 30, width, height);
+
+  // ✅ Use backticks here
+  pdf.save(`QRx-${qrData?.userData?.name || 'HealthCard'}.pdf`);
+};
+
 
   if (!qrData) {
     return (
